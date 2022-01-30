@@ -191,40 +191,40 @@ contract('SupplyChain', function(accounts) {
         const supplyChain = await SupplyChain.deployed()
         
         // Declare and Initialize a variable for event
-        
-        
+        var expectedItem = createExpectedItem();
         // Watch the emitted event ForSale()
-        
-
+        expectedItem.itemState = _ForSale;
         // Mark an item as ForSale by calling function sellItem()
-        
-
+        var lForSale = await supplyChain.sellItem(
+            expectedItem.itemUPC,
+            expectedItem.productPrice,
+            {from: expectedItem.originFarmerID}
+        );
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
-        
-
+        var item = await fetchItemFromSupplyChain(supplyChain, expectedItem.itemUPC);
         // Verify the result set
-          
+        assetItemsAreEqual(item, expectedItem);
     })    
 
     // 5th Test
     it("Testing smart contract function buyItem() that allows a distributor to buy coffee", async() => {
         const supplyChain = await SupplyChain.deployed()
-        
+        await supplyChain.addDistributor(distributorID);
         // Declare and Initialize a variable for event
-        
-        
+        var expectedItem = createExpectedItem();
         // Watch the emitted event Sold()
-        var event = supplyChain.Sold()
-        
-
+        expectedItem.itemState = _Sold;
+        expectedItem.ownerID = distributorID;
+        expectedItem.distributorID = distributorID;
         // Mark an item as Sold by calling function buyItem()
-        
-
+        var lSold = await supplyChain.buyItem(
+            expectedItem.itemUPC,
+            {from: distributorID, value: expectedItem.productPrice}
+        );
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
-        
-
+        var item = await fetchItemFromSupplyChain(supplyChain, expectedItem.itemUPC);
         // Verify the result set
-        
+        assetItemsAreEqual(item, expectedItem);
     })    
 
     // 6th Test
