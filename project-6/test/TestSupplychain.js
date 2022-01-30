@@ -250,21 +250,23 @@ contract('SupplyChain', function(accounts) {
     // 7th Test
     it("Testing smart contract function receiveItem() that allows a retailer to mark coffee received", async() => {
         const supplyChain = await SupplyChain.deployed()
-        
+        await supplyChain.addRetailer(retailerID);
         // Declare and Initialize a variable for event
-        
-        
+        var expectedItem = createExpectedItem();
         // Watch the emitted event Received()
-        
-
+        expectedItem.itemState = _Received;
+        expectedItem.ownerID = retailerID;
+        expectedItem.distributorID = distributorID;
+        expectedItem.retailerID = retailerID;
         // Mark an item as Sold by calling function buyItem()
-        
-
+        var lReceived = await supplyChain.receiveItem(
+            expectedItem.itemUPC,
+            {from: retailerID }
+        );
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
-        
-
+        var item = await fetchItemFromSupplyChain(supplyChain, expectedItem.itemUPC);
         // Verify the result set
-             
+        assetItemsAreEqual(item, expectedItem);
     })    
 
     // 8th Test
