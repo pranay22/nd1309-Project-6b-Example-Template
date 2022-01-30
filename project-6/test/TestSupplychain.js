@@ -50,9 +50,76 @@ contract('SupplyChain', function(accounts) {
     console.log("Retailer: accounts[3] ", accounts[3])
     console.log("Consumer: accounts[4] ", accounts[4])
 
+    // create Item
+    function createExpectedItem() {
+        var result = {
+            itemSKU: sku,
+            itemUPC: upc,
+            ownerID: originFarmerID,
+            originFarmerID: originFarmerID,
+            originFarmName: originFarmName,
+            originFarmInformation: originFarmInformation,
+            originFarmLatitude: originFarmLatitude,
+            originFarmLongitude: originFarmLongitude,
+            productID: productID,
+            productNotes: productNotes,
+            productPrice: productPrice,
+            itemState: itemState,
+            distributorID: emptyAddress,
+            retailerID: emptyAddress,
+            consumerID: emptyAddress
+        };
+        return result;
+    }
+
+    function assetItemsAreEqual(item, expectedItem) {
+       assert.equal(item.itemSKU, expectedItem.itemSKU, 'Error: Invalid item SKU');
+       assert.equal(item.itemUPC, expectedItem.itemUPC, 'Error: Invalid item UPC');
+       assert.equal(item.ownerID, expectedItem.ownerID, 'Error: Missing or Invalid ownerID');
+       assert.equal(item.originFarmerID, expectedItem.originFarmerID, 'Error: Missing or Invalid originFarmerID');
+       assert.equal(item.originFarmName, expectedItem.originFarmName, 'Error: Missing or Invalid originFarmName');
+       assert.equal(item.originFarmInformation, expectedItem.originFarmInformation, 'Error: Missing or Invalid originFarmInformation');
+       assert.equal(item.originFarmLatitude, expectedItem.originFarmLatitude, 'Error: Missing or Invalid originFarmLatitude');
+       assert.equal(item.originFarmLongitude, expectedItem.originFarmLongitude, 'Error: Missing or Invalid originFarmLongitude');
+       assert.equal(item.itemState, expectedItem.itemState, 'Error: Invalid item State');
+       assert.equal(item.distributorID, expectedItem.distributorID, 'Error: Invalid item State dist');
+       assert.equal(item.retailerID, expectedItem.retailerID, 'Error: Invalid item State retail');
+       assert.equal(item.consumerID, expectedItem.consumerID, 'Error: Invalid item State consum');
+    }
+
+    // fetching item from supply chain
+    async function fetchItemFromSupplyChain(supplyChain, upc, account = ownerID ) {
+        const resultBufferOne = await supplyChain.fetchItemBufferOne.call(upc, {from: account});
+        const resultBufferTwo = await supplyChain.fetchItemBufferTwo.call(upc, {from: account});
+        const resultBufferThree = await supplyChain.fetchItemBufferThree.call(upc, {from: account});
+        var result = {
+            itemSKU: resultBufferOne[0],
+            itemUPC: resultBufferOne[1],
+            ownerID: resultBufferOne[2],
+            originFarmerID: resultBufferOne[3],
+            originFarmName: resultBufferOne[4],
+            originFarmInformation: resultBufferOne[5],
+  
+            originFarmLatitude: resultBufferTwo[2],
+            originFarmLongitude: resultBufferTwo[3],
+            productID: resultBufferTwo[4],
+            productNotes: resultBufferTwo[5],
+            productPrice: resultBufferTwo[6],
+  
+            itemState: resultBufferThree[2],
+            distributorID: resultBufferThree[3],
+            retailerID: resultBufferThree[4],
+            consumerID: resultBufferThree[5]
+        };
+        return result;
+    }
+
     // 1st Test
     it("Testing smart contract function harvestItem() that allows a farmer to harvest coffee", async() => {
         const supplyChain = await SupplyChain.deployed()
+        await supplyChain.addFarmer(originFarmerID)
+
+        var expectedItem = createExpectedItem();
         
         // Declare and Initialize a variable for event
         var eventEmitted = false
@@ -86,21 +153,19 @@ contract('SupplyChain', function(accounts) {
     // 2nd Test
     it("Testing smart contract function processItem() that allows a farmer to process coffee", async() => {
         const supplyChain = await SupplyChain.deployed()
-        
         // Declare and Initialize a variable for event
-        
-        
+        var expectedItem = createExpectedItem();
         // Watch the emitted event Processed()
-        
-
+        expectedItem.itemState = _Processed;
         // Mark an item as Processed by calling function processtItem()
-        
-
+        var lProcessed = await supplyChain.processItem(
+            expectedItem.itemUPC,
+            {from: expectedItem.originFarmerID}
+        );
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
-        
-
+        var item = await fetchItemFromSupplyChain(supplyChain, expectedItem.itemUPC);
         // Verify the result set
-        
+        assetItemsAreEqual(item, expectedItem);
     })    
 
     // 3rd Test
