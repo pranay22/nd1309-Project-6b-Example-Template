@@ -171,21 +171,19 @@ contract('SupplyChain', function(accounts) {
     // 3rd Test
     it("Testing smart contract function packItem() that allows a farmer to pack coffee", async() => {
         const supplyChain = await SupplyChain.deployed()
-        
         // Declare and Initialize a variable for event
-        
-        
+        var expectedItem = createExpectedItem();
         // Watch the emitted event Packed()
-        
-
+        expectedItem.itemState = _Packed;
         // Mark an item as Packed by calling function packItem()
-        
-
+        var lPacked = await supplyChain.packItem(
+            expectedItem.itemUPC,
+            {from: expectedItem.originFarmerID}
+        );
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
-        
-
+        var item = await fetchItemFromSupplyChain(supplyChain, expectedItem.itemUPC);
         // Verify the result set
-        
+        assetItemsAreEqual(item, expectedItem);
     })    
 
     // 4th Test
