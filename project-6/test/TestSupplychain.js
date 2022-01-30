@@ -295,23 +295,21 @@ contract('SupplyChain', function(accounts) {
     // 9th Test
     it("Testing smart contract function fetchItemBufferOne() that allows anyone to fetch item details from blockchain", async() => {
         const supplyChain = await SupplyChain.deployed()
-
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
-        
+        var expectedItem = createExpectedItem();
         
         // Verify the result set:
-        
+        assetItemsAreEqual(item, expectedItem);
     })
 
     // 10th Test
     it("Testing smart contract function fetchItemBufferTwo() that allows anyone to fetch item details from blockchain", async() => {
         const supplyChain = await SupplyChain.deployed()
-
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
-        
+        var expectedItem = createExpectedItem();
         
         // Verify the result set:
-        
+        assetItemsAreEqual(item, expectedItem);
     })
 
 });
