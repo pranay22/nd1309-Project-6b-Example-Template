@@ -305,7 +305,7 @@ contract SupplyChain is ConsumerRole, DistributorRole, FarmerRole, RetailerRole,
   }
 
   // Define a function 'fetchItemBufferOne' that fetches the data
-  function fetchItemBufferOne(uint _upc) public view returns 
+  /*function fetchItemBufferOne(uint _upc) public view returns 
   (
   uint    itemSKU,
   uint    itemUPC,
@@ -371,5 +371,102 @@ contract SupplyChain is ConsumerRole, DistributorRole, FarmerRole, RetailerRole,
       retailerID = items[_upc].retailerID,
       consumerID = items[_upc].consumerID
     );
+  }*/
+
+  // Define a function 'fetchItemBufferOne' that fetches the data
+  function fetchItemBufferOne(uint _upc)
+      public
+      view
+      returns (
+          uint itemSKU,
+          uint itemUPC,
+          address ownerID,
+          address originFarmerID,
+          string memory originFarmName,
+          string memory originFarmInformation,
+          string memory originFarmLatitude,
+          string memory originFarmLongitude
+      )
+  {
+      Item memory item = items[_upc];
+      itemSKU = item.sku;
+      itemUPC = item.upc;
+      ownerID = item.ownerID;
+      originFarmerID = item.originFarmerID;
+      originFarmName = item.originFarmName;
+      originFarmInformation = item.originFarmInformation;
+      originFarmLatitude = item.originFarmLatitude;
+      originFarmLongitude = item.originFarmLongitude;
+
+      return (
+          itemSKU,
+          itemUPC,
+          ownerID,
+          originFarmerID,
+          originFarmName,
+          originFarmInformation,
+          originFarmLatitude,
+          originFarmLongitude
+      );
+  }
+
+function fetchItemBufferTwo(uint _upc)
+      public
+      view
+      returns (
+          uint itemSKU,
+          uint itemUPC,
+          uint productID,
+          string memory productNotes,
+          uint productPrice,
+          uint itemState,
+          address distributorID,
+          address retailerID,
+          address consumerID
+      )
+  {
+      Item memory item = items[_upc];
+      itemSKU = item.sku;
+      itemUPC = item.upc;
+      productID = item.productID;
+      productNotes = item.productNotes;
+      productPrice = item.productPrice;
+      /*State state = item.itemState;
+      if (state == State.None) {
+          itemState = 0;
+      } else if (state == State.Harvested) {
+          itemState = 1;
+      } else if (state == State.Processed) {
+          itemState = 2;
+      } else if (state == State.Packed) {
+          itemState = 3;
+      } else if (state == State.ForSale) {
+          itemState = 4;
+      } else if (state == State.Sold) {
+          itemState = 5;
+      } else if (state == State.Shipped) {
+          itemState = 6;
+      } else if (state == State.Received) {
+          itemState = 7;
+      } else if (state == State.Purchased) {
+          itemState = 8;
+      }*/
+      itemState = uint(item.itemState);
+
+      distributorID = item.distributorID;
+      retailerID = item.retailerID;
+      consumerID = item.consumerID;
+      
+      return (
+          itemSKU,
+          itemUPC,
+          productID,
+          productNotes,
+          productPrice,
+          itemState,
+          distributorID,
+          retailerID,
+          consumerID
+      );
   }
 }

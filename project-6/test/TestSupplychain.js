@@ -61,6 +61,7 @@ contract('SupplyChain', function(accounts) {
             originFarmInformation: originFarmInformation,
             originFarmLatitude: originFarmLatitude,
             originFarmLongitude: originFarmLongitude,
+            
             productID: productID,
             productNotes: productNotes,
             productPrice: productPrice,
@@ -91,7 +92,7 @@ contract('SupplyChain', function(accounts) {
     async function fetchItemFromSupplyChain(supplyChain, upc, account = ownerID ) {
         const resultBufferOne = await supplyChain.fetchItemBufferOne.call(upc, {from: account});
         const resultBufferTwo = await supplyChain.fetchItemBufferTwo.call(upc, {from: account});
-        const resultBufferThree = await supplyChain.fetchItemBufferThree.call(upc, {from: account});
+        //const resultBufferThree = await supplyChain.fetchItemBufferThree.call(upc, {from: account});
         var result = {
             itemSKU: resultBufferOne[0],
             itemUPC: resultBufferOne[1],
@@ -99,17 +100,31 @@ contract('SupplyChain', function(accounts) {
             originFarmerID: resultBufferOne[3],
             originFarmName: resultBufferOne[4],
             originFarmInformation: resultBufferOne[5],
+            originFarmLatitude: resultBufferOne[6],
+            originFarmLongitude: resultBufferOne[7],
   
-            originFarmLatitude: resultBufferTwo[2],
-            originFarmLongitude: resultBufferTwo[3],
+            /*originFarmLatitude: resultBufferTwo[2],
+            //originFarmLongitude: resultBufferTwo[3],
             productID: resultBufferTwo[4],
             productNotes: resultBufferTwo[5],
             productPrice: resultBufferTwo[6],
-  
             itemState: resultBufferThree[2],
             distributorID: resultBufferThree[3],
             retailerID: resultBufferThree[4],
-            consumerID: resultBufferThree[5]
+            consumerID: resultBufferThree[5]*/
+
+            productID: resultBufferTwo[2],
+            productNotes: resultBufferTwo[3],
+            productPrice: resultBufferTwo[4],
+            itemState: resultBufferTwo[5],
+            distributorID: resultBufferTwo[6],
+            retailerID: resultBufferTwo[7],
+            consumerID: resultBufferTwo[8]
+  
+            /*itemState: resultBufferThree[2],
+            distributorID: resultBufferThree[3],
+            retailerID: resultBufferThree[4],
+            consumerID: resultBufferThree[5]*/
         };
         return result;
     }
@@ -297,10 +312,16 @@ contract('SupplyChain', function(accounts) {
         const supplyChain = await SupplyChain.deployed()
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
         var expectedItem = createExpectedItem();
-        //expectedItem.
-        
+        expectedItem.itemState = _Purchased;
+        expectedItem.ownerID = consumerID;
+        expectedItem.distributorID = distributorID;
+        expectedItem.retailerID = retailerID;
+        expectedItem.consumerID = consumerID;
+
+        // Using previously unused account to fetch
+        var item = await fetchItemFromSupplyChain(supplyChain, expectedItem.itemUPC, accounts[6] ); 
         // Verify the result set:
-        //assetItemsAreEqual(item, expectedItem);
+        assetItemsAreEqual(item, expectedItem);
     })
 
     // 10th Test
