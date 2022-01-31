@@ -6,7 +6,6 @@ import "./Roles.sol";
 // Define a contract 'RetailerRole' to manage this role - add, remove, check
 contract RetailerRole {
   using Roles for Roles.Role;
-  
   // Define 2 events, one for Adding, and other for Removing
   event RetailerAdded(address indexed account);
   event RetailerRemoved(address indexed account);
@@ -21,7 +20,7 @@ contract RetailerRole {
 
   // Define a modifier that checks to see if msg.sender has the appropriate role
   modifier onlyRetailer() {
-    require(isRetailer(msg.sender));
+    require(isRetailer(msg.sender), "Only retailers can call it");
     _;
   }
 
