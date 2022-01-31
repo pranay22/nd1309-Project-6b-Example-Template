@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.8.0;
+//pragma solidity >=0.8.0;
+pragma solidity ^0.4.24;
 
 import "../coffeeaccesscontrol/ConsumerRole.sol";
 import "../coffeeaccesscontrol/DistributorRole.sol";
@@ -203,7 +204,7 @@ contract SupplyChain is ConsumerRole, DistributorRole, FarmerRole, RetailerRole,
     // Update the appropriate fields
     items[_upc].itemState = State.Processed;
     // Emit the appropriate event
-    Processed(_upc);
+    emit Processed(_upc);
   }
 
   // Define a function 'packItem' that allows a farmer to mark an item 'Packed'
@@ -251,7 +252,7 @@ contract SupplyChain is ConsumerRole, DistributorRole, FarmerRole, RetailerRole,
     // Transfer money to farmer
     //address payable receiver = payable(items[_upc].originFarmerID);
     //receiver.transfer(items[_upc].productPrice);
-    items[_upc].originFarmerID.transfer(items[_upc].productPric);
+    items[_upc].originFarmerID.transfer(items[_upc].productPrice);
 
     // emit the appropriate event
     emit Sold(_upc);
@@ -315,8 +316,6 @@ contract SupplyChain is ConsumerRole, DistributorRole, FarmerRole, RetailerRole,
   ) 
   {
   // Assign values to the 8 parameters
-  
-    
   return 
   (
   itemSKU = items[_upc].sku,
@@ -324,7 +323,7 @@ contract SupplyChain is ConsumerRole, DistributorRole, FarmerRole, RetailerRole,
   ownerID = items[_upc].ownerID,
   originFarmerID = items[_upc].originFarmerID,
   originFarmName = items[_upc].originFarmName,
-  originFarmInformation = items[_upc].originFarmInformation,
+  originFarmInformation = items[_upc].originFarmInformation
   );
   }
 
@@ -345,15 +344,13 @@ contract SupplyChain is ConsumerRole, DistributorRole, FarmerRole, RetailerRole,
     
   return 
   (
-  itemSKU,
-  itemUPC,
-  productID,
-  productNotes,
-  productPrice,
-  itemState,
-  distributorID,
-  retailerID,
-  consumerID
+    itemSKU = items[_upc].sku,
+    itemUPC = items[_upc].upc,
+    originFarmLatitude = items[_upc].originFarmLatitude,
+    originFarmLongitude = items[_upc].originFarmLongitude,
+    productID = items[_upc].productID,
+    productNotes = items[_upc].productNotes,
+    productPrice = items[_upc].productPrice
   );
   }
 
