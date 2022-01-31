@@ -93,8 +93,9 @@ contract SupplyChain is ConsumerRole, DistributorRole, FarmerRole, RetailerRole,
     _;
     uint _price = items[_upc].productPrice;
     uint amountToReturn = msg.value - _price;
-    address payable receiver = payable(items[_upc].consumerID);
-    receiver.transfer(amountToReturn);
+    items[_upc].consumerID.transfer(amountToReturn);
+    //address payable receiver = payable(items[_upc].consumerID);
+    //receiver.transfer(amountToReturn);
   }
 
   // Define a modifier that checks if an item.state of a upc is Harvested
@@ -248,8 +249,10 @@ contract SupplyChain is ConsumerRole, DistributorRole, FarmerRole, RetailerRole,
     items[_upc].distributorID = msg.sender;
     items[_upc].itemState = State.Sold;
     // Transfer money to farmer
-    address payable receiver = payable(items[_upc].originFarmerID);
-    receiver.transfer(items[_upc].productPrice);
+    //address payable receiver = payable(items[_upc].originFarmerID);
+    //receiver.transfer(items[_upc].productPrice);
+    items[_upc].originFarmerID.transfer(items[_upc].productPric);
+
     // emit the appropriate event
     emit Sold(_upc);
   }
@@ -353,9 +356,8 @@ contract SupplyChain is ConsumerRole, DistributorRole, FarmerRole, RetailerRole,
   consumerID
   );
   }
-}
 
-function fetchItemBufferThree(uint _upc) public view returns
+  function fetchItemBufferThree(uint _upc) public view returns
   (
     uint    itemSKU,
     uint    itemUPC,
@@ -373,3 +375,4 @@ function fetchItemBufferThree(uint _upc) public view returns
       consumerID = items[_upc].consumerID
     );
   }
+}
