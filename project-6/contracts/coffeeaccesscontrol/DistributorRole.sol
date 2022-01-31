@@ -1,4 +1,5 @@
-pragma solidity ^0.4.24;
+// SPDX-License-Identifier: MIT
+pragma solidity >=0.8.0;
 
 // Import the library 'Roles'
 import "./Roles.sol";
@@ -15,7 +16,7 @@ contract DistributorRole {
   Roles.Role private distributors;
 
   // In the constructor make the address that deploys this contract the 1st distributor
-  constructor() public {
+  constructor() {
     _addDistributor(msg.sender);
   }
 

@@ -1,4 +1,5 @@
-pragma solidity ^0.4.24;
+// SPDX-License-Identifier: MIT
+pragma solidity >=0.8.0;
 
 import "../coffeeaccesscontrol/ConsumerRole.sol";
 import "../coffeeaccesscontrol/DistributorRole.sol";
@@ -333,7 +334,7 @@ contract SupplyChain is ConsumerRole, DistributorRole, FarmerRole, RetailerRole,
   string memory  originFarmLongitude,
   uint    productID,
   string  memory productNotes,
-  uint    productPrice,
+  uint    productPrice
   ) 
   {
     // Assign values to the 9 parameters
@@ -363,10 +364,12 @@ function fetchItemBufferThree(uint _upc) public view returns
     address retailerID,
     address consumerID
   ) {
-    itemSKU = items[_upc].sku,
-    itemUPC = items[_upc].upc,
-    itemState = uint(items[_upc].itemState),
-    distributorID = items[_upc].distributorID,
-    retailerID = items[_upc].retailerID,
-    consumerID = items[_upc].consumerID
+    return(
+      itemSKU = items[_upc].sku,
+      itemUPC = items[_upc].upc,
+      itemState = uint(items[_upc].itemState),
+      distributorID = items[_upc].distributorID,
+      retailerID = items[_upc].retailerID,
+      consumerID = items[_upc].consumerID
+    );
   }
