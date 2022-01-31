@@ -73,7 +73,38 @@ contract('SupplyChain', function(accounts) {
         return result;
     }
 
-    function assetItemsAreEqual(item, expectedItem) {
+    // create item for first buffer
+    function createFirstBufferExpectedItem() {
+        var result = {
+            itemSKU: sku,
+            itemUPC: upc,
+            ownerID: originFarmerID,
+            originFarmerID: originFarmerID,
+            originFarmName: originFarmName,
+            originFarmInformation: originFarmInformation,
+            originFarmLatitude: originFarmLatitude,
+            originFarmLongitude: originFarmLongitude,
+        }
+        return result;
+    }
+
+    // create item for second buffer
+    function createSecondBufferExpectedItem() {
+        var result = {
+            itemSKU: sku,
+            itemUPC: upc,
+            productID: productID,
+            productNotes: productNotes,
+            productPrice: productPrice,
+            itemState: itemState,
+            distributorID: emptyAddress,
+            retailerID: emptyAddress,
+            consumerID: emptyAddress
+        }
+        return result;
+    }
+
+    function assertItemsAreEqual(item, expectedItem) {
        assert.equal(item.itemSKU, expectedItem.itemSKU, 'Error: Invalid item SKU');
        assert.equal(item.itemUPC, expectedItem.itemUPC, 'Error: Invalid item UPC');
        assert.equal(item.ownerID, expectedItem.ownerID, 'Error: Missing or Invalid ownerID');
@@ -86,6 +117,26 @@ contract('SupplyChain', function(accounts) {
        assert.equal(item.distributorID, expectedItem.distributorID, 'Error: Invalid item State dist');
        assert.equal(item.retailerID, expectedItem.retailerID, 'Error: Invalid item State retail');
        assert.equal(item.consumerID, expectedItem.consumerID, 'Error: Invalid item State consum');
+    }
+
+    function assertFirstBufferItemsAreEqual(item, expectedItem) {
+        assert.equal(item.itemSKU, expectedItem.itemSKU, 'Error: Invalid item SKU');
+        assert.equal(item.itemUPC, expectedItem.itemUPC, 'Error: Invalid item UPC');
+        assert.equal(item.ownerID, expectedItem.ownerID, 'Error: Missing or Invalid ownerID');
+        assert.equal(item.originFarmerID, expectedItem.originFarmerID, 'Error: Missing or Invalid originFarmerID');
+        assert.equal(item.originFarmName, expectedItem.originFarmName, 'Error: Missing or Invalid originFarmName');
+        assert.equal(item.originFarmInformation, expectedItem.originFarmInformation, 'Error: Missing or Invalid originFarmInformation');
+        assert.equal(item.originFarmLatitude, expectedItem.originFarmLatitude, 'Error: Missing or Invalid originFarmLatitude');
+        assert.equal(item.originFarmLongitude, expectedItem.originFarmLongitude, 'Error: Missing or Invalid originFarmLongitude');
+    }
+
+    function assertSecondBufferItemsAreEqual(item, expectedItem) {
+        assert.equal(item.itemSKU, expectedItem.itemSKU, 'Error: Invalid item SKU');
+        assert.equal(item.itemUPC, expectedItem.itemUPC, 'Error: Invalid item UPC');
+        assert.equal(item.itemState, expectedItem.itemState, 'Error: Invalid item State');
+        assert.equal(item.distributorID, expectedItem.distributorID, 'Error: Invalid item State dist');
+        assert.equal(item.retailerID, expectedItem.retailerID, 'Error: Invalid item State retail');
+        assert.equal(item.consumerID, expectedItem.consumerID, 'Error: Invalid item State consum');
     }
 
     // fetching item from supply chain
@@ -129,6 +180,37 @@ contract('SupplyChain', function(accounts) {
         return result;
     }
 
+    async function fetchItemFromSupplyChainBufferOne(supplyChain, upc, account = ownerID ) {
+        const resultBufferOne = await supplyChain.fetchItemBufferOne.call(upc, {from: account});
+        var result = {
+            itemSKU: resultBufferOne[0],
+            itemUPC: resultBufferOne[1],
+            ownerID: resultBufferOne[2],
+            originFarmerID: resultBufferOne[3],
+            originFarmName: resultBufferOne[4],
+            originFarmInformation: resultBufferOne[5],
+            originFarmLatitude: resultBufferOne[6],
+            originFarmLongitude: resultBufferOne[7],
+        };
+        return result;
+    }
+
+    async function fetchItemFromSupplyChainBufferTwo(supplyChain, upc, account = ownerID ) {
+        const resultBufferTwo = await supplyChain.fetchItemBufferTwo.call(upc, {from: account});
+        var result = {
+            itemSKU: resultBufferTwo[0],
+            itemUPC: resultBufferTwo[1],
+            productID: resultBufferTwo[2],
+            productNotes: resultBufferTwo[3],
+            productPrice: resultBufferTwo[4],
+            itemState: resultBufferTwo[5],
+            distributorID: resultBufferTwo[6],
+            retailerID: resultBufferTwo[7],
+            consumerID: resultBufferTwo[8]
+        };
+        return result;
+    }
+
     // 1st Test
     it("Testing smart contract function harvestItem() that allows a farmer to harvest coffee", async() => {
         const supplyChain = await SupplyChain.deployed()
@@ -161,7 +243,7 @@ contract('SupplyChain', function(accounts) {
         var item = await fetchItemFromSupplyChain(supplyChain, expectedItem.itemUPC);
 
         // Verify the result set 
-        assetItemsAreEqual(item, expectedItem);     
+        assertItemsAreEqual(item, expectedItem);     
     })    
 
     // 2nd Test
@@ -179,7 +261,7 @@ contract('SupplyChain', function(accounts) {
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
         var item = await fetchItemFromSupplyChain(supplyChain, expectedItem.itemUPC);
         // Verify the result set
-        assetItemsAreEqual(item, expectedItem);
+        assertItemsAreEqual(item, expectedItem);
     })    
 
     // 3rd Test
@@ -197,7 +279,7 @@ contract('SupplyChain', function(accounts) {
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
         var item = await fetchItemFromSupplyChain(supplyChain, expectedItem.itemUPC);
         // Verify the result set
-        assetItemsAreEqual(item, expectedItem);
+        assertItemsAreEqual(item, expectedItem);
     })    
 
     // 4th Test
@@ -217,7 +299,7 @@ contract('SupplyChain', function(accounts) {
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
         var item = await fetchItemFromSupplyChain(supplyChain, expectedItem.itemUPC);
         // Verify the result set
-        assetItemsAreEqual(item, expectedItem);
+        assertItemsAreEqual(item, expectedItem);
     })    
 
     // 5th Test
@@ -238,7 +320,7 @@ contract('SupplyChain', function(accounts) {
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
         var item = await fetchItemFromSupplyChain(supplyChain, expectedItem.itemUPC);
         // Verify the result set
-        assetItemsAreEqual(item, expectedItem);
+        assertItemsAreEqual(item, expectedItem);
     })    
 
     // 6th Test
@@ -258,7 +340,7 @@ contract('SupplyChain', function(accounts) {
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
         var item = await fetchItemFromSupplyChain(supplyChain, expectedItem.itemUPC);
         // Verify the result set
-        assetItemsAreEqual(item, expectedItem);
+        assertItemsAreEqual(item, expectedItem);
     })    
 
     // 7th Test
@@ -280,7 +362,7 @@ contract('SupplyChain', function(accounts) {
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
         var item = await fetchItemFromSupplyChain(supplyChain, expectedItem.itemUPC);
         // Verify the result set
-        assetItemsAreEqual(item, expectedItem);
+        assertItemsAreEqual(item, expectedItem);
     })    
 
     // 8th Test
@@ -303,7 +385,7 @@ contract('SupplyChain', function(accounts) {
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
         var item = await fetchItemFromSupplyChain(supplyChain, expectedItem.itemUPC);
         // Verify the result set
-        assetItemsAreEqual(item, expectedItem);
+        assertItemsAreEqual(item, expectedItem);
     })    
 
     // 9th Test
@@ -321,7 +403,7 @@ contract('SupplyChain', function(accounts) {
         // Using previously unused account to fetch
         var item = await fetchItemFromSupplyChain(supplyChain, expectedItem.itemUPC, accounts[6] ); 
         // Verify the result set:
-        assetItemsAreEqual(item, expectedItem);
+        assertItemsAreEqual(item, expectedItem);
     })
 
     // 10th Test
@@ -329,10 +411,15 @@ contract('SupplyChain', function(accounts) {
     it("Testing smart contract function fetchItemBufferTwo() that allows anyone to fetch item details from blockchain", async() => {
         const supplyChain = await SupplyChain.deployed()
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
-        var expectedItem = createExpectedItem();
-        
+        var expectedItem = createSecondBufferExpectedItem();
+        expectedItem.itemState = _Purchased;
+        expectedItem.distributorID = distributorID;
+        expectedItem.retailerID = retailerID;
+        expectedItem.consumerID = consumerID;
+        // Fetch from previously unused account
+        var item = await fetchItemFromSupplyChainBufferTwo(supplyChain, expectedItem.itemUPC, accounts[7]);
         // Verify the result set:
-        //assetItemsAreEqual(item, expectedItem);
+        assertSecondBufferItemsAreEqual(item, expectedItem);
     })
 
 });
