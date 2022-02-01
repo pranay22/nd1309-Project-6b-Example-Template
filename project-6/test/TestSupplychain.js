@@ -393,17 +393,12 @@ contract('SupplyChain', function(accounts) {
     it("Testing smart contract function fetchItemBufferOne() that allows anyone to fetch item details from blockchain", async() => {
         const supplyChain = await SupplyChain.deployed()
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
-        var expectedItem = createExpectedItem();
-        expectedItem.itemState = _Purchased;
+        var expectedItem = createFirstBufferExpectedItem();
         expectedItem.ownerID = consumerID;
-        expectedItem.distributorID = distributorID;
-        expectedItem.retailerID = retailerID;
-        expectedItem.consumerID = consumerID;
-
         // Using previously unused account to fetch
-        var item = await fetchItemFromSupplyChain(supplyChain, expectedItem.itemUPC, accounts[6] ); 
+        var item = await fetchItemFromSupplyChainBufferOne(supplyChain, expectedItem.itemUPC, accounts[6] ); 
         // Verify the result set:
-        assertItemsAreEqual(item, expectedItem);
+        assertFirstBufferItemsAreEqual(item, expectedItem);
     })
 
     // 10th Test
