@@ -12,6 +12,24 @@ The DApp User Interface when running should look like...
 
 ![truffle test](images/ftc_transaction_history.png)
 
+# Task 1 Diagrams
+
+## A. Activity Diagram
+
+![truffle test](images/activity_udacity_1.drawio.png)
+
+## B. Sequence Diagram 
+
+![truffle test](images/sequence_udacity_1.drawio.png)
+
+## C. State Diagram 
+
+![truffle test](images/activity_udacity_1.drawio.png)
+
+## D. CLasses (Data model)
+
+![truffle test](images/activity_udacity_1.drawio.png)
+
 
 ## Getting Started
 
