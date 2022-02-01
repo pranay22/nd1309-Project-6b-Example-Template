@@ -30,6 +30,10 @@ The DApp User Interface when running should look like...
 
 ![class diagram](images/udacity-class-diagram-1.drawio.png)
 
+# Plugin version  
+Truffle v4.1.14 (core: 4.1.14)   
+Solidity v0.4.24 (solc-js)    
+
 # Task 3 Deploy to Rinkeby
 
 Transaction: 
