@@ -28,7 +28,7 @@ The DApp User Interface when running should look like...
 
 ## D. CLasses (Data model)
 
-![class diagram](images/class-diagram_udacity_1.drawio.png)
+![class diagram](images/udacity-class-diagram-1.drawio.png)
 
 
 ## Getting Started
