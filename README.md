@@ -16,19 +16,19 @@ The DApp User Interface when running should look like...
 
 ## A. Activity Diagram
 
-![truffle test](images/activity_udacity_1.drawio.png)
+![activity diagram](images/activity_udacity_1.drawio.png)
 
 ## B. Sequence Diagram 
 
-![truffle test](images/Sequence-diagram-udacity-1.drawio.png)
+![sequence diagram](images/Sequence-diagram-udacity-1.drawio.png)
 
 ## C. State Diagram 
 
-![truffle test](images/state_udacity_1.drawio.png)
+![state diagram](mages/state-diagram-udacity-1.drawio.png)
 
 ## D. CLasses (Data model)
 
-![truffle test](images/class-diagram_udacity_1.drawio.png)
+![class diagram](images/class-diagram_udacity_1.drawio.png)
 
 
 ## Getting Started
