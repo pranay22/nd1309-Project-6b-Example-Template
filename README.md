@@ -24,7 +24,7 @@ The DApp User Interface when running should look like...
 
 ## C. State Diagram 
 
-![state diagram](mages/state-diagram-udacity-1.drawio.png)
+![state diagram](images/state-diagram-udacity-1.drawio.png)
 
 ## D. CLasses (Data model)
 
